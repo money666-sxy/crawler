@@ -5,7 +5,7 @@ import os
 from os import path
 import requests
 import pickle
-from pyquery import PyQuery
+# from pyquery import PyQuery
 
 """表单数据说明
 password:        输入的密码，明文 #我是用手机号登录，邮箱应该也可以
@@ -32,20 +32,29 @@ class WBCrawler(object):
         self.HOST = 'https://m.weibo.cn'
         self.HOT_POST_URL = 'https://m.weibo.cn/api/container/getIndex?containerid=102803'
         self.data = {
-            'username': 'account(phone number)', 'password': 'plaintext-password',
-            'savestate': '1', 'r': 'http://m.weibo.cn/',
-            'ec': '0', 'pagerefer': '', 'entry': 'mweibo',
-            'wentry': '', 'loginfrom': '', 'client_id': '',
-            'code': '', 'qq': '', 'mainpageflag': '1',
-            'hff': '', 'hfp': ''
+            'username': 'account(phone number)', # 账号
+            'password': 'plaintext-password', # 密码
+            'savestate': '1', 
+            'r': 'http://m.weibo.cn/', # 触发网址
+            'ec': '0', # 账号、密码出错次数
+            'pagerefer': '', 
+            'entry': 'mweibo', # 入口
+            'wentry': '', 'loginfrom': '', 
+            'client_id': '', # 默认空，因为我是浏览器？或者第三方登录才会有
+            'code': '', 
+            'qq': '', 
+            'mainpageflag': '1',
+            'hff': '', 
+            'hfp': ''
         }
-        self.postid = list()
-        self.poster = list()
-        self.texts = list()
-        self.signs = list()
-        self.comments = list()
+        self.postid = []
+        self.poster = []
+        self.texts = []
+        self.signs = []
+        self.comments = []
 
     def _load_session(self):
+        '''从path中获取session'''
         if path.exists('session'):
             with open('session', 'rb') as fr:
                 session = pickle.load(fr)
@@ -55,6 +64,7 @@ class WBCrawler(object):
             return None
 
     def need_to_login(self):
+        '''判断是否需要登陆'''
         resp = self.session.get(self.HOST)
         if 'passport' in resp.url or 'login' in resp.url:
             print('need to login')
@@ -68,6 +78,7 @@ class WBCrawler(object):
         return a_tag.attr('href')
 
     def login(self):
+        '''登陆'''
         url = 'http://m.weibo.cn'
         post_url = 'https://passport.weibo.cn/sso/login'
         self.session.headers.update({
@@ -84,6 +95,7 @@ class WBCrawler(object):
             print('login failed')
 
     def get_hot_cards(self):
+        '''获取热门'''
         resp = self.session.get(self.HOT_POST_URL)
         cur = 1
         while cur < self.cards_count:
@@ -170,13 +182,14 @@ class WBCrawler(object):
             yield obj, self.postid[i]
 
     def save(self, obj, num):
-        # '\' for windows. If *unix, replace it with '/'
-        name = 'weibo_file\weibo_data_%s' % num
+        '''保存爬取结果'''
+        name = 'weibo_file/weibo_data_%s' % num
         with open(name, 'wb') as fw:
             pickle.dump(obj, fw)
             print('Save %s' % name)
 
     def start(self):
+        '''开始爬取'''
         print('start')
         if self.need_to_login():
             self.login()
@@ -194,6 +207,7 @@ class WBCrawler(object):
 
 
 def show_random_data():
+    '''随机检查'''
     files = os.listdir('./weibo_file/')
     name = random.choice(files)
     with open('./weibo_file/'+name, 'rb') as fr:
@@ -207,5 +221,10 @@ def show_random_data():
 
 
 if __name__ == '__main__':
-    # WBCrawler().start()
-    show_random_data()
+    # wb = WBCrawler()
+    # wb.start()
+    # show_random_data()
+    r = requests.options('https://api.github.com/events')
+    x = requests.session()
+    print(x)
+    print(r)
