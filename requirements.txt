@@ -1,3 +1,4 @@
 requests=2.22.0
 xpinyin=0.5.6
 selenium=3.141.0
+scrapy=1.7.3
