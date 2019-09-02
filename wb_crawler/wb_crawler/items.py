@@ -39,7 +39,7 @@ class WeiboItem(Item):
     colleciton = 'weibos'
     id = Field()
     attitudes_count = Field()
-    comments_count = Filed()
+    comments_count = Field()
     reposts_count = Field()
     picture = Field()
     pictures = Field()
