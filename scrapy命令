@@ -1,4 +1,6 @@
-创建项目 scrapy startproject wb_crawler.txt
-创建爬虫 scrapy genspider woodenrobot 'https://woodenrobot.me'
-启动爬虫 scrapy crawl woodenrobot
+创建项目 scrapy startproject js_crawler
+创建爬虫 scrapy genspider woodenrobot 'https://jianshu.com'
+启动爬虫 scrapy crawl jscom
 项目详细信息: https://coda.io/d/_dk1FV0AeFr1/_suPcE#_luorg
+scrapy官方文档地址: https://doc.scrapy.org/en/latest/
+scrapy中文文档: http://www.scrapyd.cn/doc/139.html

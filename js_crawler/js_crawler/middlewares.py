@@ -101,3 +101,13 @@ class JsCrawlerDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+if __name__ == "__main__":
+    import requests
+    import time
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
+    r = requests.get(
+        headers=headers, url="https://www.jianshu.com/search?q=支付宝")
+    print(r.request.headers)

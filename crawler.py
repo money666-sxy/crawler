@@ -1,29 +1,12 @@
-import scrapy
+import re
 
 
-class BookSpider(scrapy.Spider):
-    name = 'books'
-
-    # 定义爬虫爬取起始点
-    start_urls = ['http://books.toscrape.com']
-
-    def parse(self, response):
-        for book in response.css('artical.produce_pod'):
-            name = book.xpath('./h3/a/@title')
-            price = book.css('p.price_color::text').extract_first()
-            yield {
-                'name': name,
-                'price': price,
-            }
-
-        # 提取链接
-        next_url = response.css(
-            'ul.pager li.next a;::attr(href)').extract_first()
-        if next_url:
-            next_url = response.urljoin(next_url)
-            yield scrapy.Request(next_url, callback=self.parse)
+def title_fix(title):
+    title = title.replace(
+        r"<em class='search-result-highlight'>", "").replace(r"</em>", "")
+    return title
 
 
 if __name__ == "__main__":
-    sp = BookSpider()
-    sp.parse()
+    text = "49个<em class='search-result-highlight'>Python</em> 学习必备资源，附链接 | 收藏"
+    print(title_fix(text))
