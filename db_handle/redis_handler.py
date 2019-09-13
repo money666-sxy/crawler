@@ -16,13 +16,11 @@ class RedisHandler(object):
 
     def subscribe(self):
         '''订阅'''
-        while True:
-            pub = self.__conn.pubsub()
-            pub.subscribe(self.chan_sub)
-            for item in pub.listen():
-                if item['type'] == 'pmessage' or item['type'] == 'message':
-                    print(item['data'])
-            time.sleep(1)
+        pub = self.__conn.pubsub()
+        pub.subscribe(self.chan_sub)
+        for item in pub.listen():
+            if item['type'] == 'pmessage' or item['type'] == 'message':
+                print(item['data'])
 
 if __name__ == "__main__":
     rd = RedisHandler()
