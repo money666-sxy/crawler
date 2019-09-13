@@ -1,5 +1,5 @@
-from js_crawler.items.notebook_item import NotebookItem
-from js_crawler.items.user_item import UserItem
+from items.notebook_item import NotebookItem
+from items.user_item import UserItem
 
 
 class ArticleItem(object):

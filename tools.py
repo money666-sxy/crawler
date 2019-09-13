@@ -1,5 +1,7 @@
 import datetime
 
+from items.article_item import ArticleItem
+
 def like_rate(article):
     '''发布时间/点赞数'''
 
@@ -14,11 +16,10 @@ def like_rate(article):
     if share_day[0] == '0':
         share_day = share_day[1]
     days = (datetime.datetime.today() - datetime.datetime(int(share_year), int(share_month), int(share_day))).days
+    if like_count == 0:
+        return 0
     like_rate = days / like_count
-    if like_rate > 3:
-        pass  # 优秀文章
-    else:
-        pass
+    return like_rate
 
 
 def text_fix(text):
@@ -26,3 +27,23 @@ def text_fix(text):
     text = text.replace(
         r"<em class='search-result-highlight'>", "").replace(r"</em>", "")
     return text
+
+async def create_article(text, db_queue):
+    for item in text:
+        article = ArticleItem()
+        article.id = item['id']
+        article.title = text_fix(item['title'])
+        article.content = text_fix(item['content'])
+        article.slug = item['slug']
+        article.author.id = item['user']['id']
+        article.author.nickname = item['user']['nickname']
+        article.author.author_avatar_url = item['user']['avatar_url']
+        article.notebook.id = item['notebook']['id']
+        article.notebook.name = item['notebook']['name']
+        article.commentable = item['commentable']
+        article.public_comments_count = item['public_comments_count']
+        article.like_count = item['likes_count']
+        article.views_count = item['views_count']
+        article.total_rewards_count = item['total_rewards_count']
+        article.first_shared_at = item['first_shared_at']
+        db_queue.put(article)

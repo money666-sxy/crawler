@@ -4,11 +4,10 @@ from threading import Thread
 import requests
 import json
 
-from js_crawler.info_queues.raw_info_queue import RawInfoQueue
-from js_crawler.info_queues.db_queue import DBQueue
-from js_crawler.items.article_item import ArticleItem
+from info_queues.raw_info_queue import RawInfoQueue
+from info_queues.db_queue import DBQueue
+from items.article_item import ArticleItem
 from tools import text_fix
-from tools import like_rate
 
 
 class Parser(object):
@@ -29,7 +28,7 @@ class Parser(object):
     class search_key_word(object):
         '''根据关键字搜索文章'''
 
-        def __init__(self, keyword):
+        def __init__(self, *keyword):
             self.keyword = keyword
             self.get_cookie()
             self.page_num = self.get_page_num()
@@ -55,6 +54,7 @@ class Parser(object):
                         i) + '&order_by=default')
             # print(Parser.start_urls)
             Parser.start = True
+
 
     def run(self):
         '''进程开始运行'''
@@ -128,7 +128,7 @@ class Parser(object):
                 article_db = Parser.db_queue.get()
                 try:
                     print(article_db.title)
-                    # print(article_db.content)
+                    print(article_db.content)
                     print(article_db.author.id)
                     print(article_db.first_shared_at)
                 except:
